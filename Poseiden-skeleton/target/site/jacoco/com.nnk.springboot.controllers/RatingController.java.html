@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RatingController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spring-boot-skeleton</a> &gt; <a href="index.source.html" class="el_package">com.nnk.springboot.controllers</a> &gt; <span class="el_source">RatingController.java</span></div><h1>RatingController.java</h1><pre class="source lang-java linenums">package com.nnk.springboot.controllers;
+
+import com.nnk.springboot.domain.Bid;
+import com.nnk.springboot.domain.CurvePoint;
+import com.nnk.springboot.domain.Rating;
+import com.nnk.springboot.repositories.RatingRepository;
+import com.nnk.springboot.services.BidService;
+import com.nnk.springboot.services.RatingService;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import jakarta.validation.Valid;
+
+@Controller
+<span class="fc" id="L27">public class RatingController {</span>
+    // TODO: Inject Rating service
+@Autowired
+private RatingService ratingService;
+@Autowired
+private RatingRepository ratingRepository;
+
+<span class="fc" id="L34">    private static final Logger logger = LogManager.getLogger(&quot;RatingController&quot;);</span>
+
+
+    @RequestMapping(&quot;/rating/list&quot;)
+    public String home(Model model)
+    {
+        // TODO: find all Rating, add to model
+<span class="nc" id="L41">        List&lt;Rating&gt; rating = ratingService.getRatings();</span>
+<span class="nc" id="L42">       model.addAttribute(&quot;ratings&quot;, rating);</span>
+<span class="nc" id="L43">        return &quot;rating/list&quot;;</span>
+    }
+
+    @GetMapping(&quot;/rating/add&quot;)
+    public String addRatingForm(Rating rating) {
+<span class="nc" id="L48">        return &quot;rating/add&quot;;</span>
+    }
+
+    @PostMapping(&quot;/rating/validate&quot;)
+    public String validate(@Valid Rating rating, BindingResult result, Model model) {
+        // TODO: check data valid and save to db, after saving return Rating list
+<span class="nc bnc" id="L54" title="All 2 branches missed.">        if (!result.hasErrors()) {</span>
+<span class="nc" id="L55">            logger.info(&quot;Returning rating/add page&quot;);</span>
+<span class="nc" id="L56">		model.addAttribute(&quot;rating&quot;, rating);</span>
+<span class="nc" id="L57">        ratingService.postRating(rating);        </span>
+<span class="nc" id="L58">        return &quot;redirect:/rating/list&quot;;	</span>
+		}
+<span class="nc" id="L60">                model.addAttribute(&quot;rating&quot;, rating);</span>
+<span class="nc" id="L61">        return &quot;rating/add&quot;;</span>
+    }
+
+    @GetMapping(&quot;/rating/update/{id}&quot;)
+    public String showUpdateForm(@PathVariable(&quot;id&quot;) Integer id, Model model) {
+        // TODO: get Rating by Id and to model then show to the form
+<span class="nc" id="L67">         Optional&lt;Rating&gt; rating = ratingRepository.findById(id);</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        if(! rating.isPresent()){</span>
+<span class="nc" id="L69">            return&quot;Error&quot;;   </span>
+             }
+             
+<span class="nc" id="L72">        model.addAttribute(&quot;rating&quot;, rating.get());</span>
+        
+<span class="nc" id="L74">        return &quot;rating/update&quot;;</span>
+    }
+
+    @PostMapping(&quot;/rating/update/{id}&quot;)
+    public String updateRating(@PathVariable(&quot;id&quot;) Integer id, @Valid Rating rating,
+                             BindingResult result, Model model) {
+        // TODO: check required fields, if valid call service to update Rating and return Rating list
+<span class="nc bnc" id="L81" title="All 2 branches missed.">        if (result.hasErrors()) {</span>
+<span class="nc" id="L82">			logger.info(&quot;Returning rating/update PageError&quot;);</span>
+<span class="nc" id="L83">			return &quot;Error&quot;;</span>
+		}
+<span class="nc" id="L85">		logger.info(&quot;Returning rating/update page&quot;);</span>
+<span class="nc" id="L86">		model.addAttribute(&quot;rating&quot;, rating);</span>
+<span class="nc" id="L87">		ratingService.putRating(rating.getId(), rating.getMoodysRating(), rating.getSandPRating(),</span>
+<span class="nc" id="L88">         rating.getFitchRating(), rating.getOrderNumber());</span>
+        // TODO: check required fields, if valid call service to update Curve and return Curve list
+        
+<span class="nc" id="L91">        return &quot;redirect:/rating/list&quot;;</span>
+    }
+
+    @GetMapping(&quot;/rating/delete/{id}&quot;)
+    public String deleteRating(@PathVariable(&quot;id&quot;) Integer id, Model model) {
+
+        // TODO: Find Rating by Id and delete the Rating, return to Rating list
+<span class="nc" id="L98">         Optional&lt;Rating&gt; rating = ratingRepository.findById(id);</span>
+<span class="nc" id="L99">         ratingService.deleteRating(rating.get().getId());;</span>
+<span class="nc" id="L100">        return &quot;redirect:/rating/list&quot;;</span>
+        
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

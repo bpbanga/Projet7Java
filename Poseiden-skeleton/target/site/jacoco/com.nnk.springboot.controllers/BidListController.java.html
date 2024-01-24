@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BidListController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spring-boot-skeleton</a> &gt; <a href="index.source.html" class="el_package">com.nnk.springboot.controllers</a> &gt; <span class="el_source">BidListController.java</span></div><h1>BidListController.java</h1><pre class="source lang-java linenums">package com.nnk.springboot.controllers;
+
+import com.nnk.springboot.domain.Bid;
+import com.nnk.springboot.domain.RuleName;
+import com.nnk.springboot.domain.Users;
+import com.nnk.springboot.repositories.BidListRepository;
+import com.nnk.springboot.repositories.UserRepository;
+import com.nnk.springboot.services.BidService;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+
+
+@Controller
+<span class="fc" id="L29">public class BidListController {</span>
+
+@Autowired
+private BidListRepository bidListRepository;
+@Autowired
+private BidService bidListService;
+@Autowired
+private UserRepository userRepository;
+
+
+<span class="fc" id="L39">    private static final Logger logger = LogManager.getLogger(&quot;BidListController&quot;);</span>
+
+    @RequestMapping(&quot;/bidList/list&quot;)
+    public String home(Model model   )
+    {
+<span class="nc" id="L44">       List&lt;Bid&gt; bidList = bidListService.getBidLists();</span>
+<span class="nc" id="L45">       model.addAttribute(&quot;bidLists&quot;, bidList);</span>
+        
+<span class="nc" id="L47">        return &quot;bidList/list&quot;;</span>
+    }
+
+    @GetMapping(&quot;/bidList/add&quot;)
+    public String addBidForm(Bid bidList) {        
+<span class="nc" id="L52">        return &quot;bidList/add&quot;;</span>
+    }
+
+    @PostMapping(&quot;/bidList/validate&quot;)
+    public String validate(@Valid Bid bidList, BindingResult result, Model model) {
+
+<span class="nc bnc" id="L58" title="All 2 branches missed.">        if (!result.hasErrors()) {</span>
+<span class="nc" id="L59">            logger.info(&quot;Returning bidList/add page&quot;);</span>
+<span class="nc" id="L60">		model.addAttribute(&quot;bidList&quot;, bidList);</span>
+<span class="nc" id="L61">		bidListService.postBid(bidList);</span>
+        
+<span class="nc" id="L63">        return &quot;redirect:/bidList/list&quot;;	</span>
+		}
+<span class="nc" id="L65">                model.addAttribute(&quot;bidList&quot;, bidList);</span>
+
+<span class="nc" id="L67">         return &quot;bidList/add&quot;;</span>
+		
+        
+        // TODO: check data valid and save to db, after saving return bid list
+        
+    }
+
+    @GetMapping(&quot;/bidList/update/{id}&quot;)
+    public String showUpdateForm(@PathVariable(&quot;id&quot;) Integer id, Model model) {
+<span class="nc" id="L76">        Optional&lt;Bid&gt; bid = bidListRepository.findById(id);</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">        if(! bid.isPresent()){</span>
+<span class="nc" id="L78">            return&quot;Error&quot;;   </span>
+             }
+             
+<span class="nc" id="L81">        model.addAttribute(&quot;bidList&quot;, bid.get());</span>
+        // TODO: get Bid by Id and to model then show to the form
+<span class="nc" id="L83">        return &quot;bidList/update&quot;;</span>
+    }
+
+    @PostMapping(&quot;/bidList/update/{id}&quot;)
+    public String updateBid(@PathVariable(&quot;id&quot;) Integer id, @Valid Bid bidList,
+                             BindingResult result, Model model) {
+<span class="nc bnc" id="L89" title="All 2 branches missed.">                                      if (result.hasErrors()) {</span>
+<span class="nc" id="L90">			logger.info(&quot;Returning bidList/update PageError&quot;);</span>
+<span class="nc" id="L91">			return &quot;Error&quot;;</span>
+		}
+<span class="nc" id="L93">		logger.info(&quot;Returning bidList/update page&quot;);</span>
+<span class="nc" id="L94">		model.addAttribute(&quot;bidList&quot;, bidList);</span>
+<span class="nc" id="L95">		bidListService.putBid(bidList.getBidListId(), bidList.getAccount(), bidList.getType(), bidList.getBidQuantity());</span>
+        // TODO: check required fields, if valid call service to update Bid and return list Bid
+<span class="nc" id="L97">        return &quot;redirect:/bidList/list&quot;;</span>
+    }
+
+    @GetMapping(&quot;/bidList/delete/{id}&quot;)
+    public String deleteBid(@PathVariable(&quot;id&quot;) Integer id, Model model) {
+<span class="nc" id="L102">         Optional&lt;Bid&gt; bid = bidListRepository.findById(id);</span>
+<span class="nc" id="L103">         bidListService.deleteBid(bid.get().getBidListId());</span>
+        // TODO: Find Bid by Id and delete the bid, return to Bid list
+<span class="nc" id="L105">        return &quot;redirect:/bidList/list&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,9 +1,10 @@
 package com.nnk.springboot.repositories;
 
-import com.nnk.springboot.domain.BidList;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.nnk.springboot.domain.Bid;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-
-public interface BidListRepository extends JpaRepository<BidList, Integer> {
+@Repository
+public interface BidListRepository extends CrudRepository<Bid, Integer> {
 
 }
