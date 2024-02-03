@@ -23,9 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
 
-/*
- * 
- */
+
 @Controller
 public class RatingController {
     // TODO: Inject Rating service
@@ -50,13 +48,7 @@ private RatingRepository ratingRepository;
     public String addRatingForm(Rating rating) {
         return "rating/add";
     }
-    /**
-     * check data valid and save to db, after saving return Rating list
-     * @param rating
-     * @param result
-     * @param model
-     * @return
-     */
+   
     @PostMapping("/rating/validate")
     public String validate(@Valid Rating rating, BindingResult result, Model model) {
         
@@ -71,12 +63,7 @@ private RatingRepository ratingRepository;
                
         return "rating/add";
     }
-/**
- * get Rating by Id and to model then show to the form
- * @param id
- * @param model
- * @return
- */
+
     @GetMapping("/rating/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         
@@ -90,14 +77,7 @@ private RatingRepository ratingRepository;
         return "rating/update";
         
     }
-/**
- * check required fields, if valid call service to update Rating and return Rating list
- * @param id
- * @param rating
- * @param result
- * @param model
- * @return
- */
+
     @PostMapping("/rating/update/{id}")
     public String updateRating(@PathVariable("id") Integer id, @Valid Rating rating,
                              BindingResult result, Model model) {

@@ -36,6 +36,7 @@ public class BidService {
     public void putBid(int bidToUpdateId, String accountUp , String typeUp, Double bidQuantityUp)  {
         Optional <Bid> bidUpdate = bidListRepository.findById(bidToUpdateId);
         if ( bidUpdate.isPresent()){
+            bidUpdate.get().setBidListId(bidToUpdateId);
             bidUpdate.get().setAccount(accountUp);
             bidUpdate.get().setType(typeUp);
             bidUpdate.get().setBidQuantity(bidQuantityUp);

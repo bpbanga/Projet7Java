@@ -23,9 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-/*
- * 
- */
+
 @Controller
 public class CurveController {
 
@@ -38,11 +36,7 @@ private CurvePointService curvePointService;
 
     private static final Logger logger = LogManager.getLogger("BidListController");
 
-/**
- * 
- * @param model
- * @return
- */
+
     @RequestMapping("/curvePoint/list")
     public String home(Model model)
     {
@@ -52,23 +46,13 @@ private CurvePointService curvePointService;
         
         return "curvePoint/list";
     }
-/**
- * 
- * @param curvePoint
- * @return
- */
+
     @GetMapping("/curvePoint/add")
     public String addCurveForm(CurvePoint curvePoint) {
         return "curvePoint/add";
     }
 
-/**
- * 
- * @param curvePoint
- * @param result
- * @param model
- * @return
- */
+
     @PostMapping("/curvePoint/validate")
     public String validate(@Valid CurvePoint curvePoint, BindingResult result, Model model) {
         // TODO: check data valid and save to db, after saving return Curve list
@@ -81,12 +65,7 @@ private CurvePointService curvePointService;
          logger.info("error Redirect: curvePoint/add");
         return "curvePoint/add";
     }
-/**
- * 
- * @param id
- * @param model
- * @return
- */
+
     @GetMapping("/curvePoint/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         // TODO: get CurvePoint by Id and to model then show to the form
@@ -98,14 +77,7 @@ private CurvePointService curvePointService;
         model.addAttribute("curvePoint", curvePoint.get());
         return "curvePoint/update";
     }
-/**
- * 
- * @param id
- * @param curvePoint
- * @param result
- * @param model
- * @return
- */
+
     @PostMapping("/curvePoint/update/{id}")
     public String updateCurvePoint(@PathVariable("id") Integer id, @Valid CurvePoint curvePoint,
                              BindingResult result, Model model) {
@@ -119,12 +91,7 @@ private CurvePointService curvePointService;
         // TODO: check required fields, if valid call service to update Curve and return Curve list
         return "redirect:/curvePoint/list";
     }
-/**
- * 
- * @param id
- * @param model
- * @return
- */
+
     @GetMapping("/curvePoint/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id, Model model) {
         // TODO: Find Curve by Id and delete the Curve, return to Curve list

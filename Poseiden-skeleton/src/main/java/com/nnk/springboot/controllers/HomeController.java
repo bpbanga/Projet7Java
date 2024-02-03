@@ -18,13 +18,7 @@ public class HomeController
 
 @Autowired
 	private UserRepository userRepository;
-/**
- * 
- * @param model
- * @param session
- * @param isAdmin
- * @return
- */
+
 	@RequestMapping("/home")
 	public String home(Model model,  HttpSession session   )
 	{

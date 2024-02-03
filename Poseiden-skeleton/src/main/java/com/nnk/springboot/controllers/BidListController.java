@@ -23,9 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
 
-/*
- * 
- */
+
 @Controller
 public class BidListController {
 
@@ -33,15 +31,12 @@ public class BidListController {
 private BidListRepository bidListRepository;
 @Autowired
 private BidService bidListService;
-@Autowired
+
+
 
 
     private static final Logger logger = LogManager.getLogger("BidListController");
-/**
- * 
- * @param model
- * @return
- */
+
     @RequestMapping("/bidList/list")
     public String home(Model model   )
     {
@@ -56,13 +51,7 @@ private BidService bidListService;
 
         return "bidList/add";
     }
-/**
- * 
- * @param bidList
- * @param result
- * @param model
- * @return
- */
+
     @PostMapping("/bidList/validate")
     public String validate(@Valid Bid bidList, BindingResult result, Model model) {
 
@@ -81,37 +70,26 @@ private BidService bidListService;
         // TODO: check data valid and save to db, after saving return bid list
         
     }
-/**
- * 
- * @param id
- * @param model
- * @return
- */
+
     @GetMapping("/bidList/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        Optional<Bid> bid = bidListRepository.findById(id);
-        if(! bid.isPresent()){
+        Optional<Bid> bidList = bidListRepository.findById(id);
+        if(! bidList.isPresent()){
               
              }
              
-        model.addAttribute("bidList", bid.get());
+        model.addAttribute("bidList", bidList.get());
         // TODO: get Bid by Id and to model then show to the form
         return "bidList/update";
     }
-/**
- * 
- * @param id
- * @param bidList
- * @param result
- * @param model
- * @return
- */
+
     @PostMapping("/bidList/update/{id}")
     public String updateBid(@PathVariable("id") Integer id, @Valid Bid bidList,
                              BindingResult result, Model model) {
         if (result.hasErrors()) {
             logger.info(" error Redirect:bidList/update ");
-		
+            model.addAttribute("bidList", bidList);
+
         return "bidList/update";
         }
         logger.info(" Returning bidList/update page ");
@@ -121,12 +99,7 @@ private BidService bidListService;
         return "redirect:/bidList/list";	
 		
     }
-/**
- * 
- * @param id
- * @param model
- * @return
- */
+
     @GetMapping("/bidList/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id, Model model) {
          Optional<Bid> bid = bidListRepository.findById(id);

@@ -17,7 +17,7 @@ public class CustumLogoutSuccessHandler implements LogoutSuccessHandler {
     private static final Logger logger = LogManager.getLogger("CustumLogoutSuccessHandler");
 
 	/**
-	 * method allowing authentication success and create request session
+	 * method allowing logoff success and remove request session
 	 */
 	
 

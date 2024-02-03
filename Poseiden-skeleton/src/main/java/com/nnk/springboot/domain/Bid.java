@@ -15,6 +15,7 @@ import java.sql.Timestamp;
 public class Bid {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
+    @Column(name = "BidListId")
     private Integer bidListId;
 
     @NotEmpty(message = "Account is mandatory")
@@ -23,7 +24,7 @@ public class Bid {
     @NotEmpty(message = "Type is mandatory")
     private String type;
     
-    @Min(value = 1)
+    @Min(value = 1, message = "Quantity must be positive")
     private Double bidQuantity;
 
     private Double askQuantity;

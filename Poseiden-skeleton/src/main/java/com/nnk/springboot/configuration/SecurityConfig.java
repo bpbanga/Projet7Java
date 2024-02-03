@@ -13,13 +13,17 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
   @Configuration
   
   @EnableWebSecurity
-  
+  /**
+   * application security configuration class
+
+   */
   public class SecurityConfig {
 	  
 	  /**
-	   * 
-	   * @param http  value of session 
-	   * @return 
+	   * method allowing the filtering of the different access paths on the application as well as the different authorizations on it
+	   *value of session
+	   *  @param http   instance of HttpSecurity
+	   * @return build of http
 	   * @throws Exception
 	   */
 	  @Bean
@@ -55,19 +59,28 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 	  
   
   
-	
+	/**
+	 * method allowing encodage of the password
+	 * @return new instance of BCryptPasswordEncoder 
+	 */
 	  @Bean
 	  public BCryptPasswordEncoder  passwordEncoder() { 
 		  return new  BCryptPasswordEncoder();
 	  }
 
 		
-		
+	/**
+	 * method allowing zuthentification of application
+	 * @return new instance of CustutmAuthentificationSuccessHandler
+	 */	
 	  @Bean public AuthenticationSuccessHandler loginSuccessHandler() {
 		  return new CustumAuthentificationSuccesHandler();
 		  }
 	  
-	  
+	  /**
+	   * method allowing logoff of application
+	   * @return new instance of CustumLogoutSuccessHandler
+	   */
 	  @Bean
 	  public LogoutSuccessHandler logoutSuccessHandler() {
 	      return new CustumLogoutSuccessHandler();

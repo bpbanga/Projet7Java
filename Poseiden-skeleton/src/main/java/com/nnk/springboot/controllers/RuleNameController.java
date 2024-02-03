@@ -19,9 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
-/*
- * 
- */
+
 @Controller
 public class RuleNameController {
     // TODO: Inject RuleName service

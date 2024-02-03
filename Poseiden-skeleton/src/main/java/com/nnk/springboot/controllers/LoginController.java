@@ -12,25 +12,22 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-/*
- * 
- */
+
 @Controller
 public class LoginController {
     
      /**
       * Endpoint GET /login to return Login
       * @param session attribute allowing to get a user connect
-      * @param model attribute who make link between the front ans back end
-      * @param error 
-      * @return
+      * @param model attribute who make link between the front ans back end 
+      * @return html page of login
       */
     @GetMapping("/login") 
-	public String login(HttpSession session, Model model ,  String error ){ 
+	public String login(HttpSession session, Model model    ){ 
 		  
 		  
 		model.addAttribute("connectForm", new Users());
-		model.addAttribute("error" ,error);
+		
 	
 	  
 	return "Login"; 
@@ -42,7 +39,7 @@ public class LoginController {
 	 * @param user value of the user connect username
 	 * @param password value of the user connect password
 	 * @param connectForm attribute allowing connect the back and the front end
-	 * @return html page Home
+	 * @return html page of bidList/list
 	 */
 	@RequestMapping(value="/login" , method=RequestMethod.POST)
 	public String logUser(@Validated  Users  user, @RequestParam("username") String username, @RequestParam("password") String password,
